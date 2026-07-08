@@ -8,7 +8,7 @@
   <meta name="theme-color" content="#17080b">
   <meta property="og:title" content="Colágeno + Ácido Hialurónico GECAPS">
   <meta property="og:description" content="Elegí Tangerina o Cranberry. Misma fórmula, mismos beneficios, solo cambia el sabor.">
-  <meta property="og:image" content="og-image.png">
+  <meta property="og:image" content="ChatGPT Image 7 jul 2026, 21_50_20.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
@@ -62,13 +62,35 @@
           </div>
         </div>
 
-        <div class="hero-visual reveal" aria-label="Productos Tangerina y Cranberry">
-          <figure class="hero-product-showcase">
-            <img src="ChatGPT-Image-7-jul-2026_-21_45_54.avif" alt="Colágeno GECAPS sabores Tangerina y Cranberry" width="1200" height="1500" fetchpriority="high">
-          </figure>
+        <div class="hero-visual reveal" aria-label="Galería del producto">
+          <div class="gallery">
+            <div class="gallery-main-wrapper">
+              <span class="gallery-counter"><span id="gallery-current-idx">1</span> / 4</span>
+              <button type="button" class="gallery-nav-btn gallery-nav-prev" id="gallery-prev" aria-label="Imagen anterior">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+              </button>
+              <button type="button" class="gallery-nav-btn gallery-nav-next" id="gallery-next" aria-label="Imagen siguiente">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </button>
+              <img src="ChatGPT-Image-7-jul-2026_-21_45_54.avif" alt="Colágeno GECAPS sabores Tangerina y Cranberry" class="gallery-main-img" id="gallery-main" width="1200" height="1500" fetchpriority="high">
+            </div>
+            <div class="gallery-thumbs">
+              <button type="button" class="gallery-thumb active" data-index="0" aria-label="Ver ambos sabores"><img src="ChatGPT-Image-7-jul-2026_-21_45_54.avif" alt="Colágeno GECAPS Tangerina y Cranberry" loading="lazy"></button>
+              <button type="button" class="gallery-thumb" data-index="1" aria-label="Ver beneficios"><img src="gallery-belleza.png" alt="La belleza comienza desde adentro con Colágeno GECAPS" loading="lazy"></button>
+              <button type="button" class="gallery-thumb" data-index="2" aria-label="Ver sabor Tangerina"><img src="PROD20260624_6a3c1aefd1532.jpg" alt="Colágeno GECAPS sabor Tangerina" loading="lazy"></button>
+              <button type="button" class="gallery-thumb" data-index="3" aria-label="Ver sabor Cranberry"><img src="PROD20260624_6a3c1b76820f2.jpg" alt="Colágeno GECAPS sabor Cranberry" loading="lazy"></button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
+
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        <span>✦ Sin Azúcares</span><span>✦ Delivery GRATIS</span><span>✦ Pago Contra Entrega</span><span>✦ Sin Gluten</span><span>✦ Entrega 24 a 48 hs</span><span>✦ Colágeno Hidrolizado</span><span>✦ Ácido Hialurónico</span><span>✦ Envíos a Todo Paraguay</span>
+        <span>✦ Sin Azúcares</span><span>✦ Delivery GRATIS</span><span>✦ Pago Contra Entrega</span><span>✦ Sin Gluten</span><span>✦ Entrega 24 a 48 hs</span><span>✦ Colágeno Hidrolizado</span><span>✦ Ácido Hialurónico</span><span>✦ Envíos a Todo Paraguay</span>
+      </div>
+    </div>
 
     <section class="quick-order" aria-label="Pedido rápido">
       <div class="container quick-order-inner reveal">
@@ -115,6 +137,42 @@
         <figure class="benefit-figure reveal">
           <img src="beneficio.avif" alt="Beneficios del Colágeno + Ácido Hialurónico GECAPS: firmeza y elasticidad, apariencia hidratada, cuidado de cabello y uñas, y rutina de bienestar. Sin azúcares, sin gluten, sin lactosa y sin grasas saturadas." loading="lazy" width="1536" height="1024">
         </figure>
+      </div>
+    </section>
+
+    <section class="section container accordion-section" id="diferencias">
+      <div class="section-heading reveal">
+        <span class="eyebrow">Lo que lo hace diferente</span>
+        <h2>Más que un colágeno común</h2>
+      </div>
+      <div class="accordion-group reveal">
+        <div class="accordion-item active">
+          <button type="button" class="accordion-trigger">
+            <span><span class="accordion-trigger-num">01 //</span> Fórmula completa 5 en 1</span>
+            <span class="accordion-icon">−</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">Colágeno Hidrolizado + Ácido Hialurónico + Vitamina C + Vitamina E + Zinc en una sola dosis diaria. No necesitás combinar varios productos: todo lo que tu piel, cabello y uñas necesitan, junto.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button type="button" class="accordion-trigger">
+            <span><span class="accordion-trigger-num">02 //</span> Absorción rápida, sin grumos</span>
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">El colágeno hidrolizado se disuelve fácil en agua y se absorbe rápido. Lo mezclás, revolvés y listo: una rutina simple de un vaso al día, sin texturas raras.</div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <button type="button" class="accordion-trigger">
+            <span><span class="accordion-trigger-num">03 //</span> Sin culpa, apto para tu día a día</span>
+            <span class="accordion-icon">+</span>
+          </button>
+          <div class="accordion-content">
+            <div class="accordion-content-inner">Sin azúcares, sin gluten, sin lactosa y sin grasas saturadas. Se suma a tu alimentación diaria sin sumar lo que no querés. Elegí Tangerina o Cranberry, misma fórmula.</div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -184,12 +242,27 @@
         <span class="eyebrow">Preguntas frecuentes</span>
         <h2>Respuestas rápidas antes de pedir</h2>
       </div>
-      <div class="faq-list reveal">
-        <details><summary>¿Cómo se consume?</summary><p>Mezclá una medida con agua, revolvé y consumí una vez al día según las indicaciones del envase.</p></details>
-        <details><summary>¿Cuánto tarda el envío?</summary><p>La entrega estimada es de 24 a 48 hs, según ciudad y disponibilidad de reparto.</p></details>
-        <details><summary>¿Cómo pago?</summary><p>Pagás contra entrega al recibir tu pedido. No necesitás pagar por adelantado.</p></details>
-        <details><summary>¿Qué diferencia hay entre Tangerina y Cranberry?</summary><p>Solo cambia el sabor. Ambos tienen exactamente la misma fórmula.</p></details>
-        <details><summary>¿Tiene azúcar?</summary><p>No contiene azúcares. También es sin gluten, sin lactosa y sin grasas saturadas.</p></details>
+      <div class="accordion-group reveal">
+        <div class="accordion-item">
+          <button type="button" class="accordion-trigger"><span>¿Cómo se consume?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-content"><div class="accordion-content-inner">Mezclá una medida con agua, revolvé y consumí una vez al día según las indicaciones del envase.</div></div>
+        </div>
+        <div class="accordion-item">
+          <button type="button" class="accordion-trigger"><span>¿Cuánto tarda el envío?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-content"><div class="accordion-content-inner">La entrega estimada es de 24 a 48 hs, según ciudad y disponibilidad de reparto.</div></div>
+        </div>
+        <div class="accordion-item">
+          <button type="button" class="accordion-trigger"><span>¿Cómo pago?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-content"><div class="accordion-content-inner">Pagás contra entrega al recibir tu pedido. No necesitás pagar por adelantado.</div></div>
+        </div>
+        <div class="accordion-item">
+          <button type="button" class="accordion-trigger"><span>¿Qué diferencia hay entre Tangerina y Cranberry?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-content"><div class="accordion-content-inner">Solo cambia el sabor. Ambos tienen exactamente la misma fórmula.</div></div>
+        </div>
+        <div class="accordion-item">
+          <button type="button" class="accordion-trigger"><span>¿Tiene azúcar?</span><span class="accordion-icon">+</span></button>
+          <div class="accordion-content"><div class="accordion-content-inner">No contiene azúcares. También es sin gluten, sin lactosa y sin grasas saturadas.</div></div>
+        </div>
       </div>
     </section>
 
