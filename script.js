@@ -11,6 +11,8 @@ const CONFIG = {
   supabaseAnonKey: 'sb_publishable_aRPb1yNunMEheat00BxwtQ_Uft732KJ',
   supabaseTable: 'pedidos_web',
   whatsapp: '595972738779',
+  metaPixelId: '2412226475899711',
+  ga4Id: 'G-8WM6CYEB73',
 };
 
 const productPage = document.querySelector('#product-page');
@@ -80,6 +82,51 @@ function whatsappUrl(message) {
   return `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(message)}`;
 }
 
+function isConfigured(value) {
+  return Boolean(value) && !/^(PEGAR_AQUI|G-XXXX|TU_|YOUR_|XXXX)/i.test(value);
+}
+
+function metaProductParams(extra) {
+  return Object.assign({
+    content_name: CONFIG.productName,
+    content_type: 'product',
+    value: CONFIG.productPrice,
+    currency: CONFIG.currency,
+  }, extra || {});
+}
+
+function initMetaPixel() {
+  if (!isConfigured(CONFIG.metaPixelId)) return;
+  !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s); }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', CONFIG.metaPixelId);
+  fbq('track', 'PageView');
+  fbq('track', 'ViewContent', metaProductParams());
+}
+
+function initGA4() {
+  if (!isConfigured(CONFIG.ga4Id)) return;
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  const script = document.createElement('script');
+  script.async = true;
+  script.src = `https://www.googletagmanager.com/gtag/js?id=${CONFIG.ga4Id}`;
+  document.head.appendChild(script);
+  window.gtag('js', new Date());
+  window.gtag('config', CONFIG.ga4Id);
+}
+
+function metaTrack(eventName, payload) {
+  if (typeof fbq !== 'function') return;
+  const value = payload.subtotal || payload.precio || CONFIG.productPrice;
+  const quantity = payload.cantidad || 1;
+  if (eventName === 'begin_checkout') {
+    fbq('track', 'InitiateCheckout', metaProductParams({ value }));
+  } else if (eventName === 'generate_lead') {
+    fbq('track', 'Lead', metaProductParams({ value }));
+    fbq('track', 'Purchase', metaProductParams({ value, num_items: quantity }));
+  }
+}
+
 function trackEvent(eventName, payload = {}) {
   const data = {
     producto: CONFIG.productName,
@@ -92,6 +139,7 @@ function trackEvent(eventName, payload = {}) {
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event: eventName, ...data });
   if (typeof window.gtag === 'function') window.gtag('event', eventName, data);
+  metaTrack(eventName, data);
 }
 
 async function saveOrderToSupabase(order) {
@@ -250,5 +298,7 @@ document.querySelectorAll('.reveal').forEach((element) => {
   else element.classList.add('is-visible');
 });
 
+initGA4();
+initMetaPixel();
 trackEvent('view_item');
 updateCheckoutTotal();
