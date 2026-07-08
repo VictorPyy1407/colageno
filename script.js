@@ -46,6 +46,7 @@ function showCheckout() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
   setTimeout(() => orderForm.querySelector('input[name="name"]')?.focus(), 280);
   trackEvent('begin_checkout');
+  window.VisitorTracker?.trackEcommerce('begin_checkout', { revenue: getSelectedCombo().price });
 }
 
 function getSelectedCombo() {
@@ -263,6 +264,8 @@ orderForm?.addEventListener('submit', async (event) => {
     saveLocalBackup(order);
     await saveOrderToSupabase(order);
     trackEvent('generate_lead', { sabor: flavor, combo: combo.label, cantidad: combo.quantity, subtotal: combo.price });
+    window.VisitorTracker?.trackEcommerce('generate_lead', { orderId: id, revenue: combo.price });
+    window.VisitorTracker?.trackEcommerce('purchase', { orderId: id, revenue: combo.price });
   } catch (error) {
     console.error(error);
     formError.textContent = 'No se pudo guardar el pedido. Revisá tu conexión e intentá nuevamente.';
@@ -297,6 +300,105 @@ document.querySelectorAll('.reveal').forEach((element) => {
   if (revealObserver) revealObserver.observe(element);
   else element.classList.add('is-visible');
 });
+
+// ---- Galería interactiva del hero ----
+(function initGallery() {
+  const main = document.getElementById('gallery-main');
+  const thumbs = Array.from(document.querySelectorAll('.gallery-thumb'));
+  if (!main || !thumbs.length) return;
+  const prev = document.getElementById('gallery-prev');
+  const next = document.getElementById('gallery-next');
+  const indicator = document.getElementById('gallery-current-idx');
+  const images = thumbs.map((thumb) => thumb.querySelector('img')?.getAttribute('src')).filter(Boolean);
+  let current = 0;
+
+  function update(index) {
+    current = (index + images.length) % images.length;
+    main.style.opacity = '0.3';
+    setTimeout(() => {
+      main.src = images[current];
+      main.style.opacity = '1';
+    }, 150);
+    thumbs.forEach((thumb, i) => thumb.classList.toggle('active', i === current));
+    if (indicator) indicator.textContent = current + 1;
+  }
+
+  thumbs.forEach((thumb) => thumb.addEventListener('click', () => update(parseInt(thumb.dataset.index, 10))));
+  prev?.addEventListener('click', () => update(current - 1));
+  next?.addEventListener('click', () => update(current + 1));
+})();
+
+// ---- Acordeón animado (diferencias + FAQ) ----
+(function initAccordions() {
+  document.querySelectorAll('.accordion-group').forEach((group) => {
+    group.querySelectorAll('.accordion-trigger').forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const item = trigger.closest('.accordion-item');
+        if (!item) return;
+        const isActive = item.classList.contains('active');
+        group.querySelectorAll('.accordion-item').forEach((other) => {
+          other.classList.remove('active');
+          const icon = other.querySelector('.accordion-icon');
+          if (icon) icon.textContent = '+';
+        });
+        if (!isActive) {
+          item.classList.add('active');
+          const icon = item.querySelector('.accordion-icon');
+          if (icon) icon.textContent = '−';
+        }
+      });
+    });
+  });
+})();
+
+// ---- Tracker de visitantes (alimenta "Visitantes en tiempo real" del panel admin) ----
+(function initVisitorTracker() {
+  const SUPABASE_URL = CONFIG.supabaseUrl;
+  const SUPABASE_KEY = CONFIG.supabaseAnonKey;
+  if (!SUPABASE_URL || !SUPABASE_KEY) return;
+  const TRACK_URL = SUPABASE_URL.replace(/\/$/, '') + '/functions/v1/track-visitor';
+  const sessionId = sessionStorage.getItem('lp_session_id') ||
+    ('sess_' + Math.random().toString(36).slice(2, 15) + '_' + Date.now().toString(36));
+  sessionStorage.setItem('lp_session_id', sessionId);
+  let hb = null;
+
+  function send(event, extra) {
+    const p = new URLSearchParams(location.search);
+    try {
+      fetch(TRACK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: SUPABASE_KEY, Authorization: 'Bearer ' + SUPABASE_KEY },
+        body: JSON.stringify(Object.assign({
+          event, sessionId, pageUrl: location.href, pageTitle: document.title,
+          referrer: document.referrer, userAgent: navigator.userAgent,
+          screenResolution: screen.width + 'x' + screen.height,
+          viewport: window.innerWidth + 'x' + window.innerHeight,
+          landingPage: CONFIG.origin, timestamp: new Date().toISOString(),
+          utmSource: p.get('utm_source'), utmMedium: p.get('utm_medium'),
+          utmCampaign: p.get('utm_campaign'), utmContent: p.get('utm_content'), utmTerm: p.get('utm_term'),
+        }, extra || {})),
+        keepalive: event === 'page_hide',
+      }).catch(() => {});
+    } catch (e) { /* noop */ }
+  }
+
+  function startHb() { if (!hb) hb = setInterval(() => { if (document.visibilityState === 'visible') send('heartbeat'); }, 30000); }
+  function stopHb() { if (hb) { clearInterval(hb); hb = null; } }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) { send('page_hide'); stopHb(); } else { send('page_view'); startHb(); }
+  });
+  window.addEventListener('pagehide', () => send('page_hide'));
+
+  send('page_view');
+  startHb();
+
+  window.VisitorTracker = {
+    trackEvent: send,
+    trackEcommerce: (evt, data) => { data = data || {}; send(evt, { productName: data.productName || CONFIG.productName, productPrice: data.productPrice || CONFIG.productPrice, orderId: data.orderId, revenue: data.revenue }); },
+    getSessionId: () => sessionId,
+  };
+})();
 
 initGA4();
 initMetaPixel();
